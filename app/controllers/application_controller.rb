@@ -12,4 +12,10 @@ class ApplicationController < ActionController::Base
             redirect_to "/"
         end
     end
+
+    def halready_logged_in
+        if logged_in?
+            redirect_to "/dashboard"
+        end
+    end
 end

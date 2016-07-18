@@ -15,27 +15,35 @@
                     participant.match_id == match.id && participant.is_winner
                 }[0]
                 winner = @players.select { |player|
-                    player.id == winner_participant.player_id
+                    winner_participant && player.id == winner_participant.player_id
                 }[0]
                 loser_participant = @participants.select { |participant|
                     participant.match_id == match.id && !participant.is_winner
                 }[0]
                 loser = @players.select { |player|
-                    player.id == loser_participant.player_id
+                    loser_participant && player.id == loser_participant.player_id
                 }[0]
             %>
             <tr>
                 <th scope="row"><%= match.id %></th>
-                <td><%= match.day %></td>
+                <td><%= match.human_date %></td>
                 <td>
-                    <a href="/player/<%= winner.id %>">
-                        <%= winner.real_name %>
-                    </a>
+                    <% if winner %>
+                        <a href="/player/<%= winner.id %>">
+                            <%= winner.real_name %>
+                        </a>
+                    <% else %>
+                        NULL
+                    <% end %>
                 </td>
                 <td>
-                    <a href="/player/<%= loser.id %>">
-                        <%= loser.real_name %>
-                    </a>
+                    <% if loser %>
+                        <a href="/player/<%= loser.id %>">
+                            <%= loser.real_name %>
+                        </a>
+                    <% else %>
+                        NULL
+                    <% end %>
                 </td>
             </tr>
         <% end %>

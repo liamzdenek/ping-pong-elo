@@ -1,5 +1,7 @@
 class PlayersController < ApplicationController
-	def index
+    before_action :halready_logged_in
+	
+    def index
 		
 		# root route
 	end

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 	root "players#index"
 	resource :players
     resource :sessions
+    resource :matches
 	
 	get "/dashboard", to: "dashboard#index"
 end
