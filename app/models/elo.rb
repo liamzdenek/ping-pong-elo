@@ -1,0 +1,2 @@
+class Elo < ApplicationRecord
+end

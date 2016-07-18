@@ -1,0 +1,28 @@
+<h1 class="text-center">CD TT ELO</h1>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="pull-right pill">
+				<form class="lazy" method="POST" action="/sessions">
+				    <%= flash[:login_errors] %>
+					<input name="player[email]" type="text" placeholder="Email"/>
+					<input name="player[password]" type="password" placeholder="Password"/>
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
+					<input type="submit" value="Login"/>
+				</form>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="pull-left pill">
+				<%= flash[:register_errors] %>
+				<form class="lazy" method="POST" action="/players">
+					<input name="player[real_name]" type="text" placeholder="Real Name"/>
+					<input name="player[email]" type="text" placeholder="Email"/>
+					<input name="player[password]" type="password" placeholder="Password"/>
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
+					<input type="submit" value="Register"/>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

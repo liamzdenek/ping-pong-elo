@@ -1,0 +1,29 @@
+Players
+	- location_id
+	- real_name
+	- email
+	- pw
+
+Elo
+	- player_id
+	- day int
+	- elo int
+	- uncertainty float
+
+Matches
+	- day int
+
+MatchPlayers
+	- match_id
+	- player_id
+	- is_winner
+
+SELECT *
+FROM
+	matches
+LEFT JOIN
+	match_players as winner
+	ON(winner.match_id = matches.id && winner.is_winner)
+LEFT JOIN
+	match_players as loser
+	ON(loser.match_id = matches.id && !winner.is_winner)
