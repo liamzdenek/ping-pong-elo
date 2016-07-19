@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 	resource :players
     resource :sessions
     resource :matches
-	
+    get '/matches/:match_id' => 'matches#view'
+    get '/matches/:match_id/edit' => 'matches#edit'
+
 	get "/dashboard", to: "dashboard#index"
 end

@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <%= flash[:update_errors] %>
+    </div>
+    <div class="row">
+        <form action="/matches" method="POST">
+            <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
+            <input type="hidden" name="_method" value="PUT"/>
+            <input type="hidden" name="match[id]" value="<%= @match.id %>"/>
+            <div class="form-group">
+                <label for="match[day]">Day</label>
+                <input name="match[day]" value="<%=h @match.day %>"/>
+            </div>
+            <div class="form-group">
+                <label for="match[winner]">Winner</label>
+                <%= collection_select(:match, :winner_id, @players, :id, :real_name, {:selected => @winner.id}) %> 
+            </div>
+            <div class="form-group">
+                <label for="match[loser]">Loser</label>
+                <%= collection_select(:match, :loser_id, @players, :id, :real_name, {:selected => @loser.id}) %> 
+            </div>
+            <input type="submit" value="update">
+        </form>
+    </div>
+</div>

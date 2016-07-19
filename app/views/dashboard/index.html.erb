@@ -25,7 +25,9 @@
                 }[0]
             %>
             <tr>
-                <th scope="row"><%= match.id %></th>
+                <th scope="row">
+                    <a href="/matches/<%= match.id %>"><%= match.id %></a>
+                </th>
                 <td><%= match.human_date %></td>
                 <td>
                     <% if winner %>

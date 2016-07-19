@@ -3,6 +3,60 @@ class MatchesController < ApplicationController
         @players = Player.all
     end
 
+    def view
+	    @match = Match.find(params[:match_id])
+        participants = Participant.where(match_id: @match)
+        @winner = Player.find(participants.select { |p| p.is_winner }.pluck(:player_id))[0]
+        @loser = Player.find(participants.select { |p| !p.is_winner }.pluck(:player_id))[0]
+        @players = Player.all
+    end
+
+    def edit
+	    @match = Match.find(params[:match_id])
+        participants = Participant.where(match_id: @match)
+        @winner = Player.find(participants.select { |p| p.is_winner }.pluck(:player_id))[0]
+        @loser = Player.find(participants.select { |p| !p.is_winner }.pluck(:player_id))[0]
+        @players = Player.all
+    end
+
+    def update
+        Match.transaction do
+            @match = Match.find(params[:match][:id]);
+            @match.day = params[:match][:day];
+            @match.save!
+
+            @winner_player = Player.find(params[:match][:winner_id])
+            @loser_player = Player.find(params[:match][:loser_id])
+
+            if !@winner_player || !@loser_player
+                flash[:update_errors] = "Couldn't find one or both of the players specified"
+                redirect_back(fallback_location: "/matches/"+@match.id.to_s+"/edit")
+                raise ActiveRecord::Rollback
+            end
+
+            @winner = Participant.where(match_id: @match, is_winner: true)[0]
+            if !@winner
+                flash[:update_errors] = "Couldn't find the winner record"
+                redirect_back(fallback_location: "/matches/"+@match.id.to_s+"/edit")
+                raise ActiveRecord::Rollback
+            end
+            
+            @loser = Participant.where(match_id: @match, is_winner: true)[0]
+            if !@loser
+                flash[:update_errors] = "Couldn't find the loser record"
+                redirect_back(fallback_location: "/matches/"+@match.id.to_s+"/edit")
+                raise ActiveRecord::Rollback
+            end
+            
+            @loser.player_id = @loser_player;
+            @winner.player_id = @winner_player;
+
+            @loser.save!
+            @winner.save!
+        end
+        redirect_to  "/matches/"+@match.id.to_s
+    end
+
     def create
         Player.transaction do 
             @winner = Player.find(params[:match][:winner_id])
