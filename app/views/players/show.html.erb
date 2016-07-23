@@ -1,0 +1,40 @@
+<%= render 'partials/header', :locals => {:page => "/players/"+@player.id.to_s} %>
+Match History for <%= @player.real_name %>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Match ID</th>
+            <th>Day</th>
+            <th>Opponent</th>
+            <th>Win?</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @participations.reverse().each do |p| %>
+            <%
+                match = @matches.select { |match| match.id == p.match_id }[0]
+                opponent_participation =  @opponents.select{ |o| o.match_id = p.match_id }[0]
+                opponent_player = @players.select { |pl| pl.id = opponent_participation.player_id }[0]
+            %>
+        <tr class="<%= p.is_winner ? 'success' : 'danger'%>">
+            <th scope="row">
+                <a href="/matches/<%= match.id %>"><%= match.id %></a>
+            </th>
+            <td><%= match.human_date %></td>
+            <td>
+                <a href="/players/<%= opponent_player.id %>">
+                    <%= opponent_player.real_name %>
+                </a>
+            </td>
+            <td>
+                <% if p.is_winner %>
+                    Win
+                <% else %>
+                    Loss
+                <% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+</table>

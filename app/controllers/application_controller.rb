@@ -10,12 +10,16 @@ class ApplicationController < ActionController::Base
         if !logged_in?
             flash[:login_errors] = "Please log in or register"
             redirect_to "/"
+            return true
         end
+        return false
     end
 
     def halready_logged_in
         if logged_in?
             redirect_to "/dashboard"
+            return true
         end
+        return false
     end
 end

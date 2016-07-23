@@ -1,12 +1,12 @@
+<%= render 'partials/header', :locals => {:page => "/dashboard"} %>
 <div class="container">
     <div class="row">
         <%= flash[:update_errors] %>
     </div>
     <div class="row">
-        <form action="/matches" method="POST">
+        <form action="/matches/<%= @match.id %>" method="POST">
             <input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>"/>
             <input type="hidden" name="_method" value="PUT"/>
-            <input type="hidden" name="match[id]" value="<%= @match.id %>"/>
             <div class="form-group">
                 <label for="match[day]">Day</label>
                 <input name="match[day]" value="<%=h @match.day %>"/>

@@ -3,16 +3,29 @@ class MatchesController < ApplicationController
         @players = Player.all
     end
 
-    def view
-	    @match = Match.find(params[:match_id])
+    def index
+	    @matches = Match.last(20).reverse()
+        @participants = Participant.where(match_id: @matches)
+        @players = Player.find(@participants.pluck(:player_id))        
+    end
+
+    def show
+	    @match = Match.find(params[:id])
         participants = Participant.where(match_id: @match)
-        @winner = Player.find(participants.select { |p| p.is_winner }.pluck(:player_id))[0]
-        @loser = Player.find(participants.select { |p| !p.is_winner }.pluck(:player_id))[0]
-        @players = Player.all
+        print participants
+        winner_id = participants.select { |p| p.is_winner }.pluck(:player_id)
+        loser_id = participants.select { |p| !p.is_winner }.pluck(:player_id)
+        if winner_id && winner_id[0]
+            @winner = Player.find(winner_id)[0]
+        end
+        if loser_id && winner_id[0]
+            @loser = Player.find(loser_id)[0]
+        end
+        #@players = Player.all
     end
 
     def edit
-	    @match = Match.find(params[:match_id])
+	    @match = Match.find(params[:id])
         participants = Participant.where(match_id: @match)
         @winner = Player.find(participants.select { |p| p.is_winner }.pluck(:player_id))[0]
         @loser = Player.find(participants.select { |p| !p.is_winner }.pluck(:player_id))[0]
@@ -21,12 +34,17 @@ class MatchesController < ApplicationController
 
     def update
         Match.transaction do
-            @match = Match.find(params[:match][:id]);
+            @match = Match.find(params[:id]);
             @match.day = params[:match][:day];
             @match.save!
 
             @winner_player = Player.find(params[:match][:winner_id])
             @loser_player = Player.find(params[:match][:loser_id])
+
+            puts "winner"
+            puts @winner_player
+            puts "loser"
+            puts @loser_player
 
             if !@winner_player || !@loser_player
                 flash[:update_errors] = "Couldn't find one or both of the players specified"
@@ -48,8 +66,8 @@ class MatchesController < ApplicationController
                 raise ActiveRecord::Rollback
             end
             
-            @loser.player_id = @loser_player;
-            @winner.player_id = @winner_player;
+            @loser.player_id = @loser_player.id;
+            @winner.player_id = @winner_player.id;
 
             @loser.save!
             @winner.save!

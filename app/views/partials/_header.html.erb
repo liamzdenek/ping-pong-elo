@@ -5,13 +5,16 @@
 			<a class="nav-link" href="/dashboard">Dashboard</a>
 		</li>
 		<li class="nav-item">
-			<a class="nav-link" href="/player/<%= session[:logged_in_as] %>">Profile</a>
+			<a class="nav-link" href="/players/<%= session[:logged_in_as] %>">Profile</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="/matches">All Matches</a>
 		</li>
 		<li class="nav-item">
 			<a class="nav-link" href="/matches/new">Add Match</a>
 		</li>
 	</ul>
-	<div class="form-inline pull-xs-right">
+	<div class="form-inline pull-right">
 		<%= render 'partials/logout' %>
 	</div>
 	<!--form class="form-inline pull-xs-right">

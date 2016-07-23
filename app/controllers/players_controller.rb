@@ -1,10 +1,20 @@
 class PlayersController < ApplicationController
-    before_action :halready_logged_in
+    #before_action :hlogged_in
 	
     def index
 		
 		# root route
 	end
+
+    def show
+        @player = Player.find(params[:id])
+        @participations = Participant.where(player_id: @player)
+        match_ids = @participations.pluck(:match_id)
+        @opponents = Participant.where(match_id: match_ids)
+        @opponents = @opponents.select {|o| !@participations.pluck(:id).include? o.id }
+        @matches = Match.find(match_ids)
+        @players = Player.find(@opponents.pluck(:player_id))
+    end
 
 	def create
 		@player = Player.new(create_params)

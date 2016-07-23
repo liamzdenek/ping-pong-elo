@@ -1,5 +1,5 @@
 class Match < ApplicationRecord
-    has_many :participants
+    has_many :participants, dependent: :delete_all
 
     before_validation :transform_date, on: [:create, :update]
 
