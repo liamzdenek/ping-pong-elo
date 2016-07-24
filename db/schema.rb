@@ -10,14 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160717190629) do
+ActiveRecord::Schema.define(version: 20160724155759) do
+
+  create_table "batches", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "elos", force: :cascade do |t|
-    t.integer  "day"
-    t.integer  "elo"
-    t.float    "uncertainty"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer "day"
+    t.integer "elo"
+    t.float   "uncertainty"
+    t.integer "player_id"
+    t.integer "batch_id"
   end
 
   create_table "matches", force: :cascade do |t|

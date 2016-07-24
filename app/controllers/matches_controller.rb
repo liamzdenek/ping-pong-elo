@@ -1,4 +1,6 @@
 class MatchesController < ApplicationController
+    before_action :hlogged_in
+
     def new
         @players = Player.all
     end

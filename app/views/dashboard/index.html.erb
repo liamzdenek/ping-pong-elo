@@ -1,3 +1,42 @@
 <%= render 'partials/header', :locals => {:page => "/players/"} %>
-TODO
-
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Today's Leaderboard (updated daily)</h1>
+            <h3>Batch: <%= @batch.id %> -- <%= @batch.created_at %></h3>
+        </div>
+        <div class="col-md-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>Rank</th>
+                        <th>Elo</th>
+                        <th>Uncertainty</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% i = 0; %>
+                    <% @elos.each do |elo| %>
+                        <%
+                            player = @players.select { |player|
+                                player.id == elo.player_id
+                            }[0]
+                            i+= 1
+                        %>
+                        <tr>
+                            <th scope="row">
+                                <a href="/players/<%= player.id %>">
+                                    <%= player.real_name %>
+                                </a>
+                            </th>
+                            <td><%= i %></td>
+                            <td><%= elo.elo %></td>
+                            <td><%= elo.uncertainty %></td>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

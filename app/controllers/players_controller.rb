@@ -14,6 +14,8 @@ class PlayersController < ApplicationController
         @opponents = @opponents.select {|o| !@participations.pluck(:id).include? o.id }
         @matches = Match.find(match_ids)
         @players = Player.find(@opponents.pluck(:player_id))
+        batch = Batch.last
+        @elos = Elo.where(batch_id: batch, player_id: @player).order(day: "DESC").limit(100)
     end
 
 	def create
