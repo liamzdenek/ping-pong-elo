@@ -88,6 +88,12 @@ class MatchesController < ApplicationController
                 raise ActiveRecord::Rollback
             end
 
+            if @winner.id == @loser.id
+                flash[:match_errors] = "Cannot add a self-played game"
+                redirect_back(fallback_location: "/matches/new")
+                raise ActiveRecord::Rollback
+            end
+
             @match = Match.new(
                 params.require(:match).permit(:date_year, :date_month, :date_day)
             )
@@ -120,6 +126,8 @@ class MatchesController < ApplicationController
             end
 
         end
-        redirect_to "/matches/"+@match.id.to_s
+        if !performed?
+            redirect_to "/matches/"+@match.id.to_s
+        end
     end
 end
